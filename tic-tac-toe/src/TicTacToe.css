@@ -1,0 +1,55 @@
+.game 
+    {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+.board 
+    {
+        display: inline-block;
+    }
+
+.row 
+    {
+        display: flex;
+    }
+
+.square 
+    {
+        width: 80px;
+        height: 80px;
+        margin: 4px;
+        font-size: 2rem;
+        background: #f0f0f0;
+        border: 2px solid #999;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+.square.highlight 
+    {
+        background: #ffc107;
+        color: black;
+    }
+
+.info 
+    {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+.controls button 
+    {
+        margin: 10px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+.history 
+    {
+        margin-top: 20px;
+        text-align: left;
+        display: inline-block;
+    }
