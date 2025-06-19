@@ -33,7 +33,7 @@ Before you begin, ensure that the following tools are installed:
 
 - git clone https://github.com/vatsal2412/React-Project.git
 
-- cd tic-tac-toe-react
+- cd tic-tac-toe
 
 📦 3. Install Project Dependencies
 - Once inside the project folder, install the required npm packages:
