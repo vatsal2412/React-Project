@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const TicTacToe = () => 
-{
+  const TicTacToe = () => 
+  {
     const emptyBoard = Array(9).fill(null);
     const [board, setBoard] = useState(emptyBoard);
     const [xIsNext, setXIsNext] = useState(true);
@@ -10,7 +10,7 @@ const TicTacToe = () =>
     const [intervalId, setIntervalId] = useState(null);
     const [history, setHistory] = useState([]);
     const [scores, setScores] = useState({ X: 0, O: 0 });
-    const [vsAI, setVsAI] = useState(true);
+    const [vsComputer, setVsComputer] = useState(true);
 
     // Start the game timer on initial render
     useEffect(() => 
@@ -22,36 +22,36 @@ const TicTacToe = () =>
 
     // Handle player's move
     const handleClick = useCallback((i) => 
-    {
-      if (board[i] || winnerInfo) return; // Prevent moves if cell is filled or game is over
+      {
+        if (board[i] || winnerInfo) return; // Prevent moves if cell is filled or game is over
 
-      const newBoard = [...board];
-      newBoard[i] = xIsNext ? 'X' : 'O';
-      setBoard(newBoard);
-      setHistory([...history, newBoard]);
+        const newBoard = [...board];
+        newBoard[i] = xIsNext ? 'X' : 'O';
+        setBoard(newBoard);
+        setHistory([...history, newBoard]);
 
-      const winner = calculateWinner(newBoard);
+        const winner = calculateWinner(newBoard);
 
-      if (winner) 
-        {
-          setWinnerInfo(winner);
-          clearInterval(intervalId);
-          setScores(prev => (
+        if (winner) 
           {
-            ...prev,
-            [winner.symbol]: prev[winner.symbol] + 1,
-          }));
-        } 
-      else if (newBoard.every(Boolean)) 
-        {
-          clearInterval(intervalId); // Stop timer on draw
-        }
+            setWinnerInfo(winner);
+            clearInterval(intervalId);
+            setScores(prev => (
+            {
+              ...prev,
+              [winner.symbol]: prev[winner.symbol] + 1,
+            }));
+          } 
+        else if (newBoard.every(Boolean)) 
+          {
+            clearInterval(intervalId); // Stop timer on draw
+          }
 
       setXIsNext(!xIsNext);
     }, [board, xIsNext, winnerInfo, intervalId, history]);
 
-    // AI makes a random move when it's its turn
-    const makeAIMove = useCallback(() => 
+    // Computer makes a random move when it's its turn
+    const makeComputerMove = useCallback(() => 
     {
       const emptyIndices = board
         .map((val, i) => (val ? null : i))
@@ -64,15 +64,15 @@ const TicTacToe = () =>
       }
     }, [board, handleClick]);
 
-    // AI move trigger when it's AI's turn
+    // Computer move trigger when it's its turn
     useEffect(() => 
     {
-      if (vsAI && !xIsNext && !winnerInfo) 
+      if (vsComputer && !xIsNext && !winnerInfo) 
       {
-        const timeout = setTimeout(makeAIMove, 500); // Slight delay for realism
+        const timeout = setTimeout(makeComputerMove, 500); // Slight delay for realism
         return () => clearTimeout(timeout);
       }
-    }, [vsAI, xIsNext, winnerInfo, makeAIMove]);
+    }, [vsComputer, xIsNext, winnerInfo, makeComputerMove]);
 
     // Reset the game to initial state
     const resetGame = () => 
@@ -128,8 +128,8 @@ const TicTacToe = () =>
 
         <div className="controls">
           <button onClick={resetGame}> Reset</button>
-          <button onClick={() => setVsAI(!vsAI)}>
-            Mode: {vsAI ? 'Vs AI ' : '2 Player '}
+          <button onClick={() => setVsComputer(!vsComputer)}>
+            Mode: {vsComputer ? 'Vs Computer ' : '2 Player 👥'}
           </button>
         </div>
 
@@ -143,28 +143,28 @@ const TicTacToe = () =>
         </div>
       </div>
     );
-};
-
-  // Function to check if there is a winner
-  const calculateWinner = (squares) => 
-  {
-    const lines = 
-    [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-      [0, 4, 8], [2, 4, 6],           // Diagonals
-    ];
-
-    for (let line of lines) 
-    {
-      const [a, b, c] = line;
-      if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) 
-      {
-        return { symbol: squares[a], line }; // Return winning symbol and line
-      }
-    }
-
-    return null; // No winner
   };
 
-  export default TicTacToe;
+// Function to check if there is a winner
+const calculateWinner = (squares) => 
+{
+  const lines = 
+  [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6],           // Diagonals
+  ];
+
+  for (let line of lines) 
+  {
+    const [a, b, c] = line;
+    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) 
+    {
+      return { symbol: squares[a], line }; // Return winning symbol and line
+    }
+  }
+
+  return null; // No winner
+};
+
+export default TicTacToe;
