@@ -9,19 +9,20 @@ This repository contains a collection of React-based projects built for learning
 
 Each project lives in its own folder and is self-contained with its own dependencies, components, and documentation (if needed).
 
-react-projects/
+```text
+React-Project/
 │
 ├── project-name-1/
-│ ├── src/
-│ ├── public/
-│ ├── package.json
-│ └── README.md
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── README.md
 │
 ├── project-name-2/
-│ ├── ...
-│└── README.md <-- you're here
-
-
+│   ├── ...
+│
+└── README.md  <-- you're here
+```
 
 ## 🔧 Prerequisites
 
