@@ -30,29 +30,26 @@ Before you begin, ensure that the following tools are installed:
 📁 2. Clone the Repository
 
 - Use Git to download the project to your local machine.
-
-- git clone https://github.com/vatsal2412/React-Project.git
-
-- cd tic-tac-toe
+  ```bash
+   git clone https://github.com/vatsal2412/React-Project.git
+   cd tic-tac-toe
 
 📦 3. Install Project Dependencies
 - Once inside the project folder, install the required npm packages:
-
-- npm install
+  ```bash
+    npm install
 
 - This command will install all the dependencies listed in the package.json file, including React, React DOM, and development tools.
 
 ▶️ 4. Start the Development Server
 
 - To run the app locally on your browser, use the following command:
-
-- npm start
+  ```bash
+    npm start
 
 - Launch the development server.
 
-- Open the game automatically in your default browser at:
-
-- http://localhost:3000
+- Open the game automatically in your default browser at: http://localhost:3000
 
 🔄 If the browser doesn’t open automatically, you can manually visit http://localhost:3000.
 
