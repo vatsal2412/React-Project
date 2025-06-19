@@ -20,6 +20,22 @@ react-projects/
 ├── project-name-2/
 │ ├── ...
 │└── README.md <-- you're here
+
+
+
+## 🔧 Prerequisites
+
+Before you begin, ensure that the following tools are installed:
+
+✅ Node.js and npm (Node v14+ recommended)
+
+✅ Git (to clone the project)
+
+✅ A code editor like VS Code
+
+✅ A modern browser like Chrome or Firefox
+
+
 ## 🛠️ How to Run Any Project
 
 > Each project is independent and can be run on its own.
