@@ -1,6 +1,5 @@
-# 🕹️ Tic Tac Toe – React Edition
+# 🕹️ Tic Tac Toe – Advanced edition
 
-A modern, responsive **Tic Tac Toe** game built with **React.js**, featuring two game modes:
 
 - 🎮 Play against the computer  
 - 👥 Play with a friend (2 Player Mode)
@@ -8,7 +7,22 @@ A modern, responsive **Tic Tac Toe** game built with **React.js**, featuring two
 > Lightweight, fun, and fully responsive — a perfect React project to learn game logic, state management, hooks, animations, and component-based design.
 
 ---
+  ## Structure 
+```text
+  
+  tic-tac-toe-react/
+  │
+  ├── public/               # index.html and static assets
+  ├── src/
+  │   ├── components/       # GameBoard, reusable UI elements
+  │   ├── pages/            # Home screen, Game screen
+  │   ├── App.jsx           # Routing and layout
+  │   ├── styles.css        # Global styling and themes
+  │   └── index.js          # App entry point
+  ├── package.json
+  └── README.md
 
+```
 ## 🚀 Features
 
 ✅ Start game manually with a button  
@@ -31,38 +45,24 @@ A modern, responsive **Tic Tac Toe** game built with **React.js**, featuring two
 
 ## 🛠️ Installation
 
-To run the game locally on your machine:
+1. **Clone this repository**
+   ```bash
+   git clone https://github.com/vatsal2412/React-Project/tic-tac-toe-2
+   cd react-projects  
+2. **Navigate into a project folder**
+   ```bash
+    cd tic-tac-toe
 
+3. **Install dependencies**
     ```bash
-    # 1. Clone the repository
-    git clone https://github.com/your-username/tic-tac-toe-react.git
-    cd tic-tac-toe-react
+      npm install
+4. **Start the development server**
+    ```bash
+      npm start
+5. **Open in browser**
+Visit: http://localhost:3000
   
-    # 2. Install dependencies
-    npm install
-  
-    # 3. Start the development server
-    npm start
-  
-  
-    #4. Now open your browser and go to http://localhost:3000 🎉
-  
-  ## Structure 
-```text
-  
-  tic-tac-toe-react/
-  │
-  ├── public/               # index.html and static assets
-  ├── src/
-  │   ├── components/       # GameBoard, reusable UI elements
-  │   ├── pages/            # Home screen, Game screen
-  │   ├── App.jsx           # Routing and layout
-  │   ├── styles.css        # Global styling and themes
-  │   └── index.js          # App entry point
-  ├── package.json
-  └── README.md
 
-```
 ## 📌 How to Play
 Choose a mode on the home screen (vs Computer or 2 Player)
 
