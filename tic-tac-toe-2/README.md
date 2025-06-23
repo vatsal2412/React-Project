@@ -48,6 +48,8 @@ To run the game locally on your machine:
     #4. Now open your browser and go to http://localhost:3000 🎉
   
   ## Structure 
+```text
+  
   tic-tac-toe-react/
   │
   ├── public/               # index.html and static assets
@@ -60,7 +62,7 @@ To run the game locally on your machine:
   ├── package.json
   └── README.md
 
-
+```
 ## 📌 How to Play
 Choose a mode on the home screen (vs Computer or 2 Player)
 
