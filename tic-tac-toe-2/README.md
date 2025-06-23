@@ -47,8 +47,7 @@
 
 1. **Clone this repository**
    ```bash
-   git clone https://github.com/vatsal2412/React-Project/tic-tac-toe-2
-   cd react-projects  
+   [git clone https://github.com/vatsal2412/React-Project.git]
 2. **Navigate into a project folder**
    ```bash
     cd tic-tac-toe
