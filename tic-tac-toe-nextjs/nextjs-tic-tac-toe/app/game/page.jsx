@@ -37,7 +37,7 @@ export default function Game()
   const [intervalId, setIntervalId] = useState(null);
   const [moves, setMoves] = useState([]);
 
-  // ✅ Start the timer when game starts
+  //  Start the timer when game starts
   const startGame = () => 
   {
     setBoard(emptyBoard);
@@ -50,7 +50,7 @@ export default function Game()
     setIntervalId(id);
   };
 
-  // ✅ Handle player or computer move
+  //  Handle player or computer move
   const handleClick = useCallback(
     (i) => 
     {
@@ -59,7 +59,7 @@ export default function Game()
       const symbol = xIsNext ? "❌" : "⭕";
       newBoard[i] = symbol;
       setBoard(newBoard);
-      setMoves([...moves, `${symbol} ➝ ${i + 1}`]); // ✅ Track move number
+      setMoves([...moves, `${symbol} ➝ ${i + 1}`]); //  Track move number
       const winner = calculateWinner(newBoard);
       if (winner) 
       {
@@ -72,7 +72,7 @@ export default function Game()
     [board, xIsNext, winnerInfo, gameStarted, intervalId, moves]
   );
 
-  // ✅ Computer makes random move if in that mode
+  // Computer makes random move if in that mode
   useEffect(() => 
     {
       if (mode === "computer" && !xIsNext && !winnerInfo && gameStarted) 
@@ -83,7 +83,7 @@ export default function Game()
       }
     }, [mode, xIsNext, winnerInfo, board, gameStarted, handleClick]);
 
-  // ✅ Reset the board and timer
+  //  Reset the board and timer
   const resetGame = () => 
   {
     setBoard(emptyBoard);
@@ -125,7 +125,7 @@ export default function Game()
         <button onClick={() => router.push("/")}>🏠 Back to Home</button>
       </div>
 
-      {/* ✅ Move History */}
+      {/*  Move History */}
       {
         moves.length > 0 && (
         <div className="history">
