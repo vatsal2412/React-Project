@@ -30,23 +30,23 @@ A modern, responsive Tic Tac Toe game built with **Next.js**, featuring two game
 
 # 1. **Clone the repository:**
 
-    ```bash
+    
       git clone 
       cd nextjs-tic-tac-toe
 
----
 
-
-# 2.Install dependencies:
-    ```bash
+# 2. **Install dependencies:**
+    
     npm install
-# 3.Run the development server:
-    ```bash
+# 3. **Run the development server:**
+   
     npm run dev
-# Open in browser:
-    ```bash
+# 4. **Open in browser:**
+    
     http://localhost:3000
 ## Structure
+
+```text
 nextjs-tic-tac-toe/
 │
 ├── app/
