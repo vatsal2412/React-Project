@@ -3,20 +3,23 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import "../styles/globals.css";
 
-export default function Home() {
+export default function Home() 
+{
   const router = useRouter();
   const [allGames, setAllGames] = useState([]);
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("allGameHistory")) || [];
     setAllGames(stored);
-  }, []);
+}, []);
 
-  const startGame = (mode) => {
+  const startGame = (mode) => 
+  {
     router.push(`/game?mode=${mode}`);
   };
 
-  const clearHistory = () => {
+  const clearHistory = () => 
+  {
     localStorage.removeItem("allGameHistory");
     setAllGames([]);
   };
@@ -30,7 +33,8 @@ export default function Home() {
         <button onClick={() => startGame("2player")}>2 Player 👥</button>
       </div>
 
-      {allGames.length > 0 && (
+{
+  allGames.length > 0 && (
         <div className="history">
           <h4>📜 Game History</h4>
           <ol>
