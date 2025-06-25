@@ -110,7 +110,7 @@ export default function Game()
     {
       const empty = board.map((val, i) => val ? null : i).filter(i => i !== null);
       const move = empty[Math.floor(Math.random() * empty.length)];
-      setTimeout(() => handleClick(move), 500);
+      setTimeout(() => handleClick(move), 100);
     }
   }, [mode, xIsNext, winnerInfo, board, gameStarted, handleClick]);
 
