@@ -16,7 +16,7 @@ const calculateWinner = (squares) =>
   ];
   for (let [a, b, c] of lines) 
   {
-    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) 
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) 
     {
       return { symbol: squares[a], line: [a, b, c] };
     }
@@ -27,8 +27,7 @@ const calculateWinner = (squares) =>
 const saveGameToHistory = (entry) => 
 {
   const prev = JSON.parse(localStorage.getItem("allGameHistory") || "[]");
-  const updated = [...prev, entry];
-  localStorage.setItem("allGameHistory", JSON.stringify(updated));
+  localStorage.setItem("allGameHistory", JSON.stringify([...prev, entry]));
 };
 
 export default function Game() 
@@ -36,6 +35,8 @@ export default function Game()
   const params = useSearchParams();
   const mode = params.get("mode");
   const router = useRouter();
+  const [playerX, setPlayerX] = useState("");
+  const [playerO, setPlayerO] = useState("");
   const [board, setBoard] = useState(emptyBoard);
   const [xIsNext, setXIsNext] = useState(true);
   const [winnerInfo, setWinnerInfo] = useState(null);
@@ -59,43 +60,49 @@ export default function Game()
   const handleClick = useCallback((i) => 
   {
     if (!gameStarted || board[i] || winnerInfo) return;
-
-    const newBoard = [...board];
     const symbol = xIsNext ? "❌" : "⭕";
+    const newBoard = [...board];
     newBoard[i] = symbol;
     setBoard(newBoard);
-    setMoves([...moves, `${symbol} ➝ ${i + 1}`]);
+    setMoves(prev => [...prev, `${symbol} ➝ ${i + 1}`]);
 
     const winner = calculateWinner(newBoard);
     if (winner) 
+    {
+      setWinnerInfo(winner);
+      clearInterval(intervalId);
+      saveGameToHistory(
       {
-        setWinnerInfo(winner);
-        clearInterval(intervalId);
-        saveGameToHistory
-        (
-          {
-            winner: winner.symbol,
-            mode: mode,
-            moves: moves.length + 1,
-            date: new Date().toLocaleString()
-          }
-        );
-      } 
+        winner: winner.symbol,
+        mode,
+        moves: moves.length + 1,
+        date: new Date().toLocaleString(),
+        players: 
+        {
+          "❌": playerX || "Player X",
+          "⭕": playerO || (mode === "computer" ? "Computer" : "Player O")
+        }
+      });
+    } 
     else if (newBoard.every(Boolean)) 
     {
       clearInterval(intervalId);
-      saveGameToHistory
-      (
+      saveGameToHistory(
+      {
+        winner: "Draw",
+        mode,
+        moves: moves.length + 1,
+        date: new Date().toLocaleString(),
+        players: 
         {
-          winner: 'Draw',
-          mode: mode,
-          moves: moves.length + 1,
-          date: new Date().toLocaleString()
+          "❌": playerX || "Player X",
+          "⭕": playerO || (mode === "computer" ? "Computer" : "Player O")
         }
-      );
+      });
     }
+
     setXIsNext(!xIsNext);
-  }, [board, xIsNext, winnerInfo, gameStarted, intervalId, moves, mode]);
+  }, [board, xIsNext, winnerInfo, gameStarted, intervalId, moves.length, playerX, playerO, mode]);
 
   useEffect(() => 
   {
@@ -109,38 +116,57 @@ export default function Game()
 
   const resetGame = () => 
   {
-    setBoard(emptyBoard);
-    setWinnerInfo(null);
-    setXIsNext(true);
-    setMoves([]);
     setGameStarted(false);
     setTimer(0);
     clearInterval(intervalId);
+    setBoard(emptyBoard);
+    setWinnerInfo(null);
+    setMoves([]);
   };
 
   return (
     <div className="container">
       <h2>{mode === "computer" ? "Vs Computer 🤖" : "2 Player 👥"}</h2>
+
+      {!gameStarted && (
+        <>
+          <h4>👤 Enter Player Name{mode === "2player" ? "s" : ""}</h4>
+          <input
+            type="text"
+            placeholder="❌ Player X"
+            value={playerX}
+            onChange={(e) => setPlayerX(e.target.value)}
+          />
+          {mode === "2player" && (
+            <input
+              type="text"
+              placeholder="⭕ Player O"
+              value={playerO}
+              onChange={(e) => setPlayerO(e.target.value)}
+            />
+          )}
+          <button
+            onClick={startGame}
+            disabled={!playerX || (mode === "2player" && !playerO)}
+          >
+            ▶️ Start Game
+          </button>
+        </>
+      )}
+
       <p>
         {
           winnerInfo
-            ? `🎉 Winner: ${winnerInfo.symbol}`
+            ? `🎉 Winner: ${winnerInfo.symbol === "❌" ? playerX : (playerO || "Computer")} (${winnerInfo.symbol})`
             : board.every(Boolean)
-            ? "🤝 Draw!"
-            : gameStarted
-            ? `🕹️ Turn: ${xIsNext ? "❌" : "⭕"}`
-            : "Click Start to Play"
+              ? "🤝 Draw!"
+              : gameStarted
+                ? `🕹️ Turn: ${xIsNext ? playerX : (playerO || "Computer")} (${xIsNext ? "❌" : "⭕"})`
+                : "Click Start to Play"
         }
       </p>
 
       {gameStarted && <p>⏱ Time: {timer}s</p>}
-
-      {
-        !gameStarted && 
-      (
-        <button onClick={startGame}>▶️ Start Game</button>
-      )
-      }
 
       <GameBoard
         board={board}
@@ -154,19 +180,12 @@ export default function Game()
         <button onClick={() => router.push("/")}>🏠 Home</button>
       </div>
 
-      {
-        moves.length > 0 && 
-        (
-          <div className="history">
-            <h4>🧾 Move History</h4>
-            <ol>
-              {moves.map((m, i) => (
-                <li key={i}>{m}</li>
-              ))}
-            </ol>
-          </div>
-        )
-      }
+      {moves.length > 0 && (
+        <div className="history">
+          <h4>🧾 Move History</h4>
+          <ol>{moves.map((m, i) => <li key={i}>{m}</li>)}</ol>
+        </div>
+      )}
     </div>
   );
 }

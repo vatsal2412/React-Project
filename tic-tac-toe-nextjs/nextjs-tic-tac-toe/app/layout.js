@@ -1,21 +1,31 @@
-import { Poppins } from 'next/font/google';
+"use client";
+import { useState, useEffect } from "react";
+import "../styles/globals.css";
 
-const poppins = Poppins
-({
-  weight: ['400', '600'],
-  subsets: ['latin'],
-});
+export default function RootLayout({ children }) {
+  const [theme, setTheme] = useState("light");
 
-export const metadata = 
-{
-  title: 'Tic Tac Toe',
-};
+  useEffect(() => {
+    const stored = localStorage.getItem("theme") || "light";
+    setTheme(stored);
+    document.body.classList.add(stored);
+  }, []);
 
-export default function RootLayout({ children }) 
-{
+  const toggleTheme = () => {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    document.body.classList.replace(theme, next);
+    localStorage.setItem("theme", next);
+  };
+
   return (
-    <html lang="en">
-      <body className={poppins.className}>{children}</body>
+    <html>
+      <body>
+        <button className="theme-toggle" onClick={toggleTheme}>
+          {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+        </button>
+        {children}
+      </body>
     </html>
   );
 }
