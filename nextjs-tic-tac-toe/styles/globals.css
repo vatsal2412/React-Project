@@ -111,7 +111,7 @@ button:hover
   margin-bottom: 0.4rem;
 }
 
-/* === RESPONSIVE DESIGN === */
+
 @media (max-width: 500px) 
 {
   .board 
@@ -134,8 +134,9 @@ button:hover
   }
 }
 
-/* === THEME TOGGLE BUTTON === */
-.theme-toggle {
+
+.theme-toggle 
+{
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -149,46 +150,57 @@ button:hover
   z-index: 999;
   transition: background 0.3s;
 }
-.theme-toggle:hover {
+.theme-toggle:hover 
+{
   background: #3b5edb;
 }
 
-/* === LIGHT THEME (default) === */
-body.light {
+
+body.light 
+{
   background: linear-gradient(to right, #f9fcff, #e3efff);
   color: #222;
 }
-body.light .container {
+body.light .container 
+{
   background: white;
 }
-body.light .square {
+body.light .square 
+{
   background: #f0f4ff;
   color: #222;
 }
-body.light .square.highlight {
+body.light .square.highlight 
+{
   background-color: #ffe066;
 }
 
-/* === DARK THEME === */
-body.dark {
+
+body.dark 
+{
   background: linear-gradient(to right, #1a1a1a, #2c2c2c);
   color: #eee;
 }
-body.dark .container {
+body.dark .container 
+{
   background: #2e2e2e;
 }
-body.dark .square {
+body.dark .square 
+{
   background: #444;
   color: white;
   border-color: #666;
 }
-body.dark .square.highlight {
+body.dark .square.highlight 
+{
   background-color: #ffc107;
 }
-body.dark button {
+body.dark button 
+{
   background: #555;
   color: white;
 }
-body.dark .theme-toggle {
+body.dark .theme-toggle
+{
   background: #888;
 }
