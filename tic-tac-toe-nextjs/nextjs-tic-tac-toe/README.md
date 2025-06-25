@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 Tic Tac Toe — Built with Next.js 13
 
-## Getting Started
+A modern, responsive Tic Tac Toe game built with **Next.js**, featuring two game modes, animated win detection, emoji-style symbols, and a mobile-friendly design inspired by [Behance UI references](https://www.behance.net/gallery/177430049/Tic-Tac-Toe-game-UI-DESIGN).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- ✅ **Start Game** manually with a button
+- ✅ Play against the **Computer 🤖** or in **2-Player mode 👥**
+- ✅ Animated **highlight for winning cells**
+- ✅ Clean and simple **emoji-style UI**: ❌ and ⭕
+- ✅ Responsive for **mobile and desktop**
+- ✅ **Step history** showing each move
+- ✅ Timer starts only when game begins
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
+| Tool       | Purpose              |
+|------------|----------------------|
+| ⚛️ React   | Component-based UI   |
+| 🔀 Next.js | Routing & rendering  |
+| 🎨 CSS     | Styling & animation  |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 Installation & Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 1. **Clone the repository:**
 
-## Deploy on Vercel
+    
+      git clone 
+      cd nextjs-tic-tac-toe
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# 2. **Install dependencies:**
+    
+    npm install
+# 3. **Run the development server:**
+   
+    npm run dev
+# 4. **Open in browser:**
+    
+    http://localhost:3000
+## Structure
+
+```text
+nextjs-tic-tac-toe/
+│
+├── app/
+│   ├── page.jsx                 # Home screen (mode selection)
+│   └── game/
+│       └── page.jsx             # Game logic and layout
+│
+├── components/
+│   └── GameBoard.jsx           # Board rendering component
+│
+├── public/
+│   └── favicon.ico             # (Optional) favicon or assets
+│  
+│
+├── styles/
+│   └── globals.css             # Global styles, board, animation
+│
+├── .gitignore                  # Ignore node_modules, .next, etc.
+├── README.md                   # Project description and usage
+├── package.json                # Project metadata and dependencies
+├── package-lock.json           # Dependency versions lock
+└── next.config.js              # Next.js configuration

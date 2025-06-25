@@ -137,9 +137,9 @@ export default function Game()
 
       {
         !gameStarted && 
-        (
-          <button onClick={startGame}>▶️ Start Game</button>
-        )
+      (
+        <button onClick={startGame}>▶️ Start Game</button>
+      )
       }
 
       <GameBoard
