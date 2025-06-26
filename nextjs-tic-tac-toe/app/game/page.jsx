@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../../styles/globals.css";
 import GameBoard from "../../components/GameBoard";
 
@@ -32,11 +32,13 @@ const saveGameToHistory = (entry) =>
 
 export default function Game() 
 {
-  const params = useSearchParams();
-  const mode = params.get("mode");
+  const mode = useSearchParams().get("mode");
   const router = useRouter();
+
   const [playerX, setPlayerX] = useState("");
   const [playerO, setPlayerO] = useState("");
+  const [nameError, setNameError] = useState(false);
+
   const [board, setBoard] = useState(emptyBoard);
   const [xIsNext, setXIsNext] = useState(true);
   const [winnerInfo, setWinnerInfo] = useState(null);
@@ -47,58 +49,69 @@ export default function Game()
 
   const startGame = () => 
   {
+    if (!playerX || (mode === "2player" && !playerO)) 
+      {
+        setNameError(true);
+        return;
+      }
+    setNameError(false);
     setBoard(emptyBoard);
     setWinnerInfo(null);
     setXIsNext(true);
     setMoves([]);
     setGameStarted(true);
     setTimer(0);
-    const id = setInterval(() => setTimer(t => t + 1), 1000);
+    const id = setInterval(() => setTimer((t) => t + 1), 1000);
     setIntervalId(id);
   };
 
   const handleClick = useCallback((i) => 
   {
     if (!gameStarted || board[i] || winnerInfo) return;
+
     const symbol = xIsNext ? "❌" : "⭕";
     const newBoard = [...board];
     newBoard[i] = symbol;
     setBoard(newBoard);
-    setMoves(prev => [...prev, `${symbol} ➝ ${i + 1}`]);
+    setMoves((prev) => [...prev, `${symbol} ➝ ${i + 1}`]);
 
     const winner = calculateWinner(newBoard);
     if (winner) 
     {
       setWinnerInfo(winner);
       clearInterval(intervalId);
-      saveGameToHistory(
-      {
-        winner: winner.symbol,
-        mode,
-        moves: moves.length + 1,
-        date: new Date().toLocaleString(),
-        players: 
+      saveGameToHistory
+      (
         {
-          "❌": playerX || "Player X",
-          "⭕": playerO || (mode === "computer" ? "Computer" : "Player O")
-        }
-      });
+          winner: winner.symbol,
+          mode,
+          moves: moves.length + 1,
+          date: new Date().toLocaleString(),
+          players: 
+          {
+            "❌": playerX || "Player X",
+            "⭕": playerO || (mode === "computer" ? "Computer" : "Player O"),
+          },
+       }
+      );
     } 
     else if (newBoard.every(Boolean)) 
     {
       clearInterval(intervalId);
-      saveGameToHistory(
-      {
-        winner: "Draw",
-        mode,
-        moves: moves.length + 1,
-        date: new Date().toLocaleString(),
-        players: 
+      saveGameToHistory
+      (
         {
-          "❌": playerX || "Player X",
-          "⭕": playerO || (mode === "computer" ? "Computer" : "Player O")
+          winner: "Draw",
+          mode,
+          moves: moves.length + 1,
+          date: new Date().toLocaleString(),
+          players: 
+          {
+            "❌": playerX || "Player X",
+            "⭕": playerO || (mode === "computer" ? "Computer" : "Player O"),
+          },
         }
-      });
+      );
     }
 
     setXIsNext(!xIsNext);
@@ -110,15 +123,15 @@ export default function Game()
     {
       const empty = board.map((val, i) => val ? null : i).filter(i => i !== null);
       const move = empty[Math.floor(Math.random() * empty.length)];
-      setTimeout(() => handleClick(move), 100);
+      setTimeout(() => handleClick(move), 500);
     }
-  }, [mode, xIsNext, winnerInfo, board, gameStarted, handleClick]);
+  }, [xIsNext, board, winnerInfo, mode, gameStarted, handleClick]);
 
   const resetGame = () => 
   {
+    clearInterval(intervalId);
     setGameStarted(false);
     setTimer(0);
-    clearInterval(intervalId);
     setBoard(emptyBoard);
     setWinnerInfo(null);
     setMoves([]);
@@ -135,35 +148,54 @@ export default function Game()
             type="text"
             placeholder="❌ Player X"
             value={playerX}
-            onChange={(e) => setPlayerX(e.target.value)}
+            onChange=
+          {
+            (e) =>
+            {
+              setPlayerX(e.target.value);
+              setNameError(false);
+            }
+          }
           />
           {mode === "2player" && (
             <input
               type="text"
               placeholder="⭕ Player O"
               value={playerO}
-              onChange={(e) => setPlayerO(e.target.value)}
+              onChange=
+              {
+                (e) => 
+                {
+                  setPlayerO(e.target.value);
+                  setNameError(false);
+                }
+              }
             />
           )}
-          <button
-            onClick={startGame}
-            disabled={!playerX || (mode === "2player" && !playerO)}
-          >
-            ▶️ Start Game
-          </button>
+
+          
+        {
+          nameError ? (
+            <p className="error-message">
+              ⚠️ Please enter a player names to start.
+            </p>
+          ) : (
+            <div style={{ height: "1.5rem" }}></div>
+          )
+        }
+
+          <button onClick={startGame}>▶️ Start Game</button>
         </>
       )}
 
       <p>
-        {
-          winnerInfo
-            ? `🎉 Winner: ${winnerInfo.symbol === "❌" ? playerX : (playerO || "Computer")} (${winnerInfo.symbol})`
-            : board.every(Boolean)
-              ? "🤝 Draw!"
-              : gameStarted
-                ? `🕹️ Turn: ${xIsNext ? playerX : (playerO || "Computer")} (${xIsNext ? "❌" : "⭕"})`
-                : "Click Start to Play"
-        }
+        {winnerInfo
+          ? `🎉 Winner: ${winnerInfo.symbol === "❌" ? playerX : (playerO || "Computer")} (${winnerInfo.symbol})`
+          : board.every(Boolean)
+            ? "🤝 Draw!"
+            : gameStarted
+              ? `🕹️ Turn: ${xIsNext ? playerX : (playerO || "Computer")} (${xIsNext ? "❌" : "⭕"})`
+              : "Click Start to Play"}
       </p>
 
       {gameStarted && <p>⏱ Time: {timer}s</p>}
@@ -183,7 +215,11 @@ export default function Game()
       {moves.length > 0 && (
         <div className="history">
           <h4>🧾 Move History</h4>
-          <ol>{moves.map((m, i) => <li key={i}>{m}</li>)}</ol>
+          <ol>
+            {moves.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ol>
         </div>
       )}
     </div>
