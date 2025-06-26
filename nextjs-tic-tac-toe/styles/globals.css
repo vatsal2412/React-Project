@@ -199,12 +199,12 @@ body.dark button
   background: #555;
   color: white;
 }
-body.dark .theme-toggle 
+body.dark 
+.theme-toggle 
 {
   background: #888;
 }
-.error-message 
-{
+.error-message {
   color: #e63946;
   font-size: 0.95rem;
   margin-top: 0.5rem;

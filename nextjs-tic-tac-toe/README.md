@@ -1,4 +1,4 @@
-# 🎮 Tic Tac Toe — Built with Next.js 13
+# 🎮 Tic Tac Toe — Built with Next.js
 
 A modern, responsive Tic Tac Toe game built with **Next.js**, featuring two game modes, animated win detection, emoji-style symbols, and a mobile-friendly design inspired by [Behance UI references](https://www.behance.net/gallery/177430049/Tic-Tac-Toe-game-UI-DESIGN).
 
