@@ -34,11 +34,9 @@ export default function Game()
 {
   const mode = useSearchParams().get("mode");
   const router = useRouter();
-
   const [playerX, setPlayerX] = useState("");
   const [playerO, setPlayerO] = useState("");
   const [nameError, setNameError] = useState(false);
-
   const [board, setBoard] = useState(emptyBoard);
   const [xIsNext, setXIsNext] = useState(true);
   const [winnerInfo, setWinnerInfo] = useState(null);
@@ -143,7 +141,6 @@ export default function Game()
 
   return (
     <div className="container">
-      {/* Top Header with Player Names */}
       <div className="header">
         <div className="player-name left">
           <span className="emoji">❌</span>
@@ -217,7 +214,7 @@ export default function Game()
         <div className="popup-overlay">
           <div className="popup-box">
             <h4>⚠️ Name Required</h4>
-            <p>Please enter all player names before starting the game.</p>
+            <p>Please enter player name before starting the game.</p>
             <button onClick={() => setNameError(false)}>OK</button>
           </div>
         </div>
