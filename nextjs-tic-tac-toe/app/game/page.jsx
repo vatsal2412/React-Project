@@ -6,26 +6,32 @@ import GameBoard from "../../components/GameBoard";
 
 const emptyBoard = Array(9).fill(null);
 
-const calculateWinner = (squares) => {
-  const lines = [
+const calculateWinner = (squares) => 
+{
+  const lines = 
+  [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6],
   ];
-  for (let [a, b, c] of lines) {
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+  for (let [a, b, c] of lines) 
+  {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) 
+    {
       return { symbol: squares[a], line: [a, b, c] };
     }
   }
   return null;
 };
 
-const saveGameToHistory = (entry) => {
+const saveGameToHistory = (entry) => 
+{
   const prev = JSON.parse(localStorage.getItem("allGameHistory") || "[]");
   localStorage.setItem("allGameHistory", JSON.stringify([...prev, entry]));
 };
 
-export default function Game() {
+export default function Game() 
+{
   const mode = useSearchParams().get("mode");
   const router = useRouter();
 
@@ -42,8 +48,10 @@ export default function Game() {
   const [moves, setMoves] = useState([]);
   const [scores, setScores] = useState({ X: 0, O: 0 });
 
-  const startGame = () => {
-    if (!playerX || (mode === "2player" && !playerO)) {
+  const startGame = () => 
+  {
+    if (!playerX || (mode === "2player" && !playerO)) 
+    {
       setNameError(true);
       return;
     }
@@ -59,7 +67,8 @@ export default function Game() {
     setIntervalId(id);
   };
 
-  const handleClick = useCallback((i) => {
+  const handleClick = useCallback((i) => 
+  {
     if (!gameStarted || board[i] || winnerInfo) return;
 
     const symbol = xIsNext ? "❌" : "⭕";
@@ -69,31 +78,40 @@ export default function Game() {
     setMoves((prev) => [...prev, `${symbol} ➝ ${i + 1}`]);
 
     const winner = calculateWinner(newBoard);
-    if (winner) {
+    if (winner) 
+    {
       setWinnerInfo(winner);
       clearInterval(intervalId);
-      setScores(prev => ({
+      setScores(prev => (
+      {
         ...prev,
         [symbol === "❌" ? "X" : "O"]: prev[symbol === "❌" ? "X" : "O"] + 1
-      }));
-      saveGameToHistory({
+      }
+      ));
+      saveGameToHistory(
+      {
         winner: winner.symbol,
         mode,
         moves: moves.length + 1,
         date: new Date().toLocaleString(),
-        players: {
+        players: 
+        {
           "❌": playerX,
           "⭕": playerO || "Computer"
         }
       });
-    } else if (newBoard.every(Boolean)) {
+    } 
+    else if (newBoard.every(Boolean)) 
+    {
       clearInterval(intervalId);
-      saveGameToHistory({
+      saveGameToHistory(
+      {
         winner: "Draw",
         mode,
         moves: moves.length + 1,
         date: new Date().toLocaleString(),
-        players: {
+        players: 
+        {
           "❌": playerX,
           "⭕": playerO || "Computer"
         }
@@ -103,15 +121,18 @@ export default function Game() {
     setXIsNext(!xIsNext);
   }, [board, xIsNext, winnerInfo, gameStarted, intervalId, moves.length, playerX, playerO, mode]);
 
-  useEffect(() => {
-    if (mode === "computer" && !xIsNext && !winnerInfo && gameStarted) {
+  useEffect(() => 
+  {
+    if (mode === "computer" && !xIsNext && !winnerInfo && gameStarted) 
+    {
       const empty = board.map((val, i) => val ? null : i).filter(i => i !== null);
       const move = empty[Math.floor(Math.random() * empty.length)];
       setTimeout(() => handleClick(move), 500);
     }
   }, [xIsNext, board, winnerInfo, mode, gameStarted, handleClick]);
 
-  const resetGame = () => {
+  const resetGame = () => 
+  {
     clearInterval(intervalId);
     setGameStarted(false);
     setTimer(0);
