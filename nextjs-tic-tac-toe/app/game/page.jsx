@@ -6,32 +6,26 @@ import GameBoard from "../../components/GameBoard";
 
 const emptyBoard = Array(9).fill(null);
 
-const calculateWinner = (squares) => 
-{
-  const lines = 
-  [
+const calculateWinner = (squares) => {
+  const lines = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
     [0, 3, 6], [1, 4, 7], [2, 5, 8],
     [0, 4, 8], [2, 4, 6],
   ];
-  for (let [a, b, c] of lines) 
-  {
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) 
-    {
+  for (let [a, b, c] of lines) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return { symbol: squares[a], line: [a, b, c] };
     }
   }
   return null;
 };
 
-const saveGameToHistory = (entry) => 
-{
+const saveGameToHistory = (entry) => {
   const prev = JSON.parse(localStorage.getItem("allGameHistory") || "[]");
   localStorage.setItem("allGameHistory", JSON.stringify([...prev, entry]));
 };
 
-export default function Game() 
-{
+export default function Game() {
   const mode = useSearchParams().get("mode");
   const router = useRouter();
 
@@ -46,14 +40,14 @@ export default function Game()
   const [timer, setTimer] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
   const [moves, setMoves] = useState([]);
+  const [scores, setScores] = useState({ X: 0, O: 0 });
 
-  const startGame = () => 
-  {
-    if (!playerX || (mode === "2player" && !playerO)) 
-      {
-        setNameError(true);
-        return;
-      }
+  const startGame = () => {
+    if (!playerX || (mode === "2player" && !playerO)) {
+      setNameError(true);
+      return;
+    }
+
     setNameError(false);
     setBoard(emptyBoard);
     setWinnerInfo(null);
@@ -65,8 +59,7 @@ export default function Game()
     setIntervalId(id);
   };
 
-  const handleClick = useCallback((i) => 
-  {
+  const handleClick = useCallback((i) => {
     if (!gameStarted || board[i] || winnerInfo) return;
 
     const symbol = xIsNext ? "❌" : "⭕";
@@ -76,59 +69,49 @@ export default function Game()
     setMoves((prev) => [...prev, `${symbol} ➝ ${i + 1}`]);
 
     const winner = calculateWinner(newBoard);
-    if (winner) 
-    {
+    if (winner) {
       setWinnerInfo(winner);
       clearInterval(intervalId);
-      saveGameToHistory
-      (
-        {
-          winner: winner.symbol,
-          mode,
-          moves: moves.length + 1,
-          date: new Date().toLocaleString(),
-          players: 
-          {
-            "❌": playerX || "Player X",
-            "⭕": playerO || (mode === "computer" ? "Computer" : "Player O"),
-          },
-       }
-      );
-    } 
-    else if (newBoard.every(Boolean)) 
-    {
-      clearInterval(intervalId);
-      saveGameToHistory
-      (
-        {
-          winner: "Draw",
-          mode,
-          moves: moves.length + 1,
-          date: new Date().toLocaleString(),
-          players: 
-          {
-            "❌": playerX || "Player X",
-            "⭕": playerO || (mode === "computer" ? "Computer" : "Player O"),
-          },
+      setScores(prev => ({
+        ...prev,
+        [symbol === "❌" ? "X" : "O"]: prev[symbol === "❌" ? "X" : "O"] + 1
+      }));
+      saveGameToHistory({
+        winner: winner.symbol,
+        mode,
+        moves: moves.length + 1,
+        date: new Date().toLocaleString(),
+        players: {
+          "❌": playerX,
+          "⭕": playerO || "Computer"
         }
-      );
+      });
+    } else if (newBoard.every(Boolean)) {
+      clearInterval(intervalId);
+      saveGameToHistory({
+        winner: "Draw",
+        mode,
+        moves: moves.length + 1,
+        date: new Date().toLocaleString(),
+        players: {
+          "❌": playerX,
+          "⭕": playerO || "Computer"
+        }
+      });
     }
 
     setXIsNext(!xIsNext);
   }, [board, xIsNext, winnerInfo, gameStarted, intervalId, moves.length, playerX, playerO, mode]);
 
-  useEffect(() => 
-  {
-    if (mode === "computer" && !xIsNext && !winnerInfo && gameStarted) 
-    {
+  useEffect(() => {
+    if (mode === "computer" && !xIsNext && !winnerInfo && gameStarted) {
       const empty = board.map((val, i) => val ? null : i).filter(i => i !== null);
       const move = empty[Math.floor(Math.random() * empty.length)];
       setTimeout(() => handleClick(move), 500);
     }
   }, [xIsNext, board, winnerInfo, mode, gameStarted, handleClick]);
 
-  const resetGame = () => 
-  {
+  const resetGame = () => {
     clearInterval(intervalId);
     setGameStarted(false);
     setTimer(0);
@@ -139,66 +122,35 @@ export default function Game()
 
   return (
     <div className="container">
-      <h2>{mode === "computer" ? "Vs Computer 🤖" : "2 Player 👥"}</h2>
+      {/* Top Header with Player Names */}
+      <div className="header">
+        <div className="player-name left">
+          <span className="emoji">❌</span>
+          <span className="name">{playerX || "Player X"}</span>
+          <span className="score-badge">{scores.X}</span>
+        </div>
+        <div className="game-mode">
+          {mode === "computer" ? "🤖 Vs Computer" : "👥 2 Player Mode"}
+        </div>
+        <div className="player-name right">
+          <span className="emoji">⭕</span>
+          <span className="name">{playerO || (mode === "computer" ? "Computer" : "Player O")}</span>
+          <span className="score-badge">{scores.O}</span>
+        </div>
+      </div>
 
-      {!gameStarted && (
-        <>
-          <h4>👤 Enter Player Name{mode === "2player" ? "s" : ""}</h4>
-          <input
-            type="text"
-            placeholder="❌ Player X"
-            value={playerX}
-            onChange=
-          {
-            (e) =>
-            {
-              setPlayerX(e.target.value);
-              setNameError(false);
-            }
-          }
-          />
-          {mode === "2player" && (
-            <input
-              type="text"
-              placeholder="⭕ Player O"
-              value={playerO}
-              onChange=
-              {
-                (e) => 
-                {
-                  setPlayerO(e.target.value);
-                  setNameError(false);
-                }
-              }
-            />
-          )}
-
-          
-        {
-          nameError ? (
-            <p className="error-message">
-              ⚠️ Please enter a player names to start.
-            </p>
-          ) : (
-            <div style={{ height: "1.5rem" }}></div>
-          )
-        }
-
-          <button onClick={startGame}>▶️ Start Game</button>
-        </>
-      )}
-
-      <p>
-        {winnerInfo
-          ? `🎉 Winner: ${winnerInfo.symbol === "❌" ? playerX : (playerO || "Computer")} (${winnerInfo.symbol})`
-          : board.every(Boolean)
-            ? "🤝 Draw!"
-            : gameStarted
-              ? `🕹️ Turn: ${xIsNext ? playerX : (playerO || "Computer")} (${xIsNext ? "❌" : "⭕"})`
-              : "Click Start to Play"}
-      </p>
-
-      {gameStarted && <p>⏱ Time: {timer}s</p>}
+      <div className="info-bar">
+        <p>⏱ {gameStarted ? `${timer}s` : "Ready"}</p>
+        <p>
+          {winnerInfo
+            ? `🎉 Winner: ${winnerInfo.symbol === "❌" ? playerX : (playerO || "Computer")}`
+            : board.every(Boolean)
+              ? "🤝 Draw!"
+              : gameStarted
+                ? `🕹️ Turn: ${xIsNext ? playerX : (playerO || "Computer")} (${xIsNext ? "❌" : "⭕"})`
+                : "Click Start to Play"}
+        </p>
+      </div>
 
       <GameBoard
         board={board}
@@ -208,9 +160,47 @@ export default function Game()
       />
 
       <div className="controls">
-        <button onClick={resetGame}>🔄 Reset</button>
-        <button onClick={() => router.push("/")}>🏠 Home</button>
+        {!gameStarted ? (
+          <>
+            <input
+              type="text"
+              placeholder="❌ Player X Name"
+              value={playerX}
+              onChange={(e) => {
+                setPlayerX(e.target.value);
+                setNameError(false);
+              }}
+            />
+            {mode === "2player" && (
+              <input
+                type="text"
+                placeholder="⭕ Player O Name"
+                value={playerO}
+                onChange={(e) => {
+                  setPlayerO(e.target.value);
+                  setNameError(false);
+                }}
+              />
+            )}
+            <button onClick={startGame}>▶️ Start Game</button>
+          </>
+        ) : (
+          <>
+            <button onClick={resetGame}>🔄 Reset</button>
+            <button onClick={() => router.push("/")}>🏠 Home</button>
+          </>
+        )}
       </div>
+
+      {nameError && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <h4>⚠️ Name Required</h4>
+            <p>Please enter all player names before starting the game.</p>
+            <button onClick={() => setNameError(false)}>OK</button>
+          </div>
+        </div>
+      )}
 
       {moves.length > 0 && (
         <div className="history">
